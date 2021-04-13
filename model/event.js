@@ -15,7 +15,11 @@ const EventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  remainderStartBefore:{
+  reminderStartDateTime: {
+    type: Date,
+    required: true,
+  },
+  reminderStartBefore:{
     type: Number,
     required:true,
   },
@@ -33,7 +37,8 @@ function validateEvent(value) {
     userId: Joi.objectId(),
     title: Joi.string().required(),
     dateTime: Joi.date().required(),
-    remainderStartBefore: Joi.number().required(),
+    reminderStartDateTime: Joi.date().required(),
+    reminderStartBefore: Joi.number().required(),
     description: Joi.string().required()
   });
   return schema.validate(value);

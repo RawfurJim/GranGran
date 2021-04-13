@@ -3,6 +3,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const userRoutes = require("./router/user");
 const eventRoutes = require("./router/event");
+const notificationRoutes = require("./router/notification");
 const authRoutes = require("./router/auth");
 const checkAuth = require('./middlewares/checkAuth')
 const db = require('./db');
@@ -19,6 +20,7 @@ app.use(morgan('tiny'))
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", [checkAuth], userRoutes);
 app.use("/api/v1/events", [checkAuth], eventRoutes);
+app.use("/api/v1/notifications", [checkAuth], notificationRoutes);
 
 const port = process.env.PORT || 4000;
 
