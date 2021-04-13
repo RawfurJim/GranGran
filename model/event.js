@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const jwt = require("jsonwebtoken");
+Joi.objectId = require('joi-objectid')(Joi)
 
 const EventSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   title: {
     type: String,
     required: true,
@@ -19,24 +23,21 @@ const EventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
- 
 });
 
 
 const Event = mongoose.model("Event", EventSchema);
 
-function validationEvent(value) {
+function validateEvent(value) {
   const schema = Joi.object({
-    title: Joi.string()
-      .required(),
-
+    userId: Joi.objectId(),
+    title: Joi.string().required(),
     dateTime: Joi.date().required(),
     remainderStartBefore: Joi.number().required(),
     description: Joi.string().required()
   });
-  const result = schema.validate(value);
-  return result;
+  return schema.validate(value);
 }
 
 exports.Event = Event;
-exports.validate = validationEvent;
+exports.validate = validateEvent;

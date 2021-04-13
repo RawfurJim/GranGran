@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true
   },
   mobile: {
     type: String,
@@ -20,32 +21,35 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+const jwtSecretKey = "jwtPrivatekey"
 UserSchema.methods.getAuthToken = function () {
   const token = jwt.sign(
-    { _id: this._id, name: this.name, email: this.email },"jwtPrivatekey"
-    
+    {
+      _id: this._id,
+      name: this.name,
+      email: this.email,
+      mobile: this.mobile
+    },
+    jwtSecretKey,
+    {
+      expiresIn:"7d"
+    }
   );
   return token;
 };
 
 const User = mongoose.model("User", UserSchema);
 
-function validationUser(value) {
+function validateUser(value) {
   const schema = Joi.object({
-    name: Joi.string()
-      .required(),
-
+    name: Joi.string().required(),
     password: Joi.string().required(),
-
     mobile: Joi.string().min(11).max(11).required(),
-    email: Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    }),
+    email: Joi.string().email().required(),
   });
-  const result = schema.validate(value);
-  return result;
+  return schema.validate(value);
 }
 
 exports.User = User;
-exports.validate = validationUser;
+exports.validate = validateUser;

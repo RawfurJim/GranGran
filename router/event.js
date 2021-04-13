@@ -1,75 +1,44 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
+const router = require("express").Router();
 const { Event, validate } = require("../model/event.js");
-const Userauth = require("../middleware/userAuth");
-
-
-const router = express.Router();
 
 router.get("/", async (req, res) => {
-  let result = await Event.find();
-  res.send(result);
+  try {
+    const events = await Event.find({ userId: req.authUser._id});
+    res.send(events);
+  } catch (error) {
+    res.status(500).send('Internal server error.')
+  }
 });
 
 router.get("/:id", async (req, res) => {
-  let checkEvent = await Event.findById(req.params.id);
-  if (!checkEvent) {
-    res.status(404).send("Invalid Event Id");
-    return;
+  let event = await Event.findById(req.params.id);
+  if (!event) {
+    return res.status(404).send("Event does not exist.");
   }
-  
-  res.send(checkEvent);
+  res.send(event);
 });
 
 router.post("/", async (req, res) => {
-  let newEvent = 
-  { title: req.body.title,
-    dateTime: new Date(req.body.dateTime),
-    remainderStartBefore: req.body.remainderStartBefore,
-    description: req.body.description,
+  try {
+    const { authUser } = req
+    let newEvent = {
+      title: req.body.title,
+      dateTime: new Date(req.body.dateTime),
+      remainderStartBefore: req.body.remainderStartBefore,
+      description: req.body.description,
+      userId: authUser._id
+    }
+    let { error } = await validate(newEvent);
+    if (error) {
+      res.status(400).send(error.details[0].message);
+      return;
+    }
+    const event = new Event(newEvent);
+    let result = await event.save();
+    res.send(result);
+  } catch (error) {
+    res.status(500).send('Internal server error.')
   }
-  let valid = await validate(newEvent);
-  if (valid.error) {
-    res.status(400).send(valid.error.details[0].message);
-    return;
-  }
-  const event = new Event(newEvent);
-
-  let result = await event.save();
-  
-  res.send(result);
-});
-
-router.put("/:id",  async (req, res) => {
-  let checkEvent = await Event.findById(req.params.id);
-  if (!checkEvent) {
-    res.status(404).send("invalid Event id");
-    return;
-
-  }
-  let valid = validate(req.body);
-  if (valid.error) {
-    res.status(400).send(valid.error.details[0].message);
-    return;
-  }
-  (checkEvent.title = req.body.title),
-    (checkEvent.dateTime = req.body.dateTime),
-    ( checkEvent.remainderStartBefore= req.body.remainderStartBefore),
-    (checkEvent.description = req.body.description);
-  
-  let result = await checkEvent.save();
-  res.send(result);
-});
-
-router.delete("/:id", async (req, res) => {
-  let deleteEvent = await Event.findByIdAndRemove(req.params.id);
-
-  if (!deleteEvent) {
-    res.status(404).send("invalid id");
-    return;
-  }
-  res.send(deleteEvent);
 });
 
 module.exports = router;
