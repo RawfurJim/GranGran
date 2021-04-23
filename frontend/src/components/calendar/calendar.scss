@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+$primary-color: #2771D9;
+$light-color: #F2F2F2;
+$disabled-color: #C9C9C9;
+
+.big-calendar-container {
+	display: block;
+	position: relative;
+	max-width: 1037px;
+	min-width: 950px;
+	height: 100%;
+	background: white;
+	color: $primary-color;
+	font-family: 'Roboto', sans-serif;
+
+	.row {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		width: 100%;
+	}
+
+	.row-middle {
+		align-items: center;
+	}
+
+	.col {
+		flex-grow: 1;
+		flex-basis: 0;
+		max-width: 100%;
+	}
+
+	.col-start {
+		justify-content: flex-start;
+		text-align: left;
+	}
+
+	.col-center {
+		justify-content: center;
+		text-align: center;
+	}
+
+	.col-end {
+		justify-content: flex-end;
+		text-align: right;
+	}
+
+	.calendar-header {
+		font-size: 32px;
+		background: #F1F5F9;
+		padding-bottom: 24px;
+
+		.icon {
+			display: inline-block;
+			cursor: pointer;
+			transition: .15s ease-out;
+
+			:hover {
+				svg {
+					fill: $primary-color;
+				}
+			}
+
+			.chevron {
+				height: 22px;
+				width: 22px;
+			}
+		}
+	}
+
+	.week-days {
+		position: relative;
+		text-transform: uppercase;
+		font-size: 14px;
+		color: #64748B;
+		border: 1px solid #E2E8F0;
+		border-bottom: none;
+		padding: 10px 0;
+	}
+
+	.date-cells {
+
+		.row {
+			border: 1px solid #E2E8F0;
+			border-bottom: none;
+
+			&:last-child {
+				border-top: 1px solid #E2E8F0;
+				border-bottom: 1px solid #E2E8F0;
+			}
+		}
+
+		.col {
+			flex-grow: 0;
+			flex-basis: calc(100%/7);
+			width: calc(100%/7);
+			border-right: 1px solid #E2E8F0;
+
+			&:last-child {
+				border-right: none;
+			}
+		}
+
+		.cell {
+			position: relative;
+			height: 143px;
+			overflow: hidden;
+			cursor: pointer;
+			background: white;
+			transition: 0.25s ease-out;
+
+			&:hover {
+				background: $light-color;
+				background: #F1F5F9;
+				transition: 0.5s ease-out;
+			}
+
+			.day-number {
+				position: absolute;
+				display: inline-block;
+				font-size: 16px;
+				font-family: 'Roboto', sans-serif;
+				font-weight: 400;
+				left: calc(50% - 18px);
+				top: 20px;
+				width: 28px;
+				height: 28px;
+				line-height: 28px;
+				text-align: center;
+				color: #1E293B;
+				border-radius: 50%;
+				border: 1px solid transparent;
+
+
+				&.today {
+					border: 1px solid $primary-color;
+					color: $primary-color;
+				}
+
+				&.selected {
+					background-color: $primary-color;
+					color: white;
+
+					&.before{
+						background-color: grey;
+						color: white;
+					}
+				}
+			}
+
+			.events {
+				position: absolute;
+				top: calc(45% - 0px);
+				left: calc(50% - 29px);
+				color: white;
+				font-size: 9px;
+				text-align: center;
+
+				.event-identifier {
+					margin-bottom: 2px;
+					border-radius: 4px;
+					padding: 3px 5px;
+				}
+
+				.more-event-icon {
+					svg {
+						transform: rotate(90deg);
+					}
+				}
+			}
+		}
+
+		.disabled {
+			color: $disabled-color;
+			pointer-events: none;
+		}
+	}
+}

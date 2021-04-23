@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon run app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon app",
+    "frontend": "cd frontend && npm start",
+    "grangran": "concurrently \"npm run server\" \"npm run frontend\""
   },
   "keywords": [],
   "author": "",
@@ -24,5 +27,8 @@
     "nodemon": "^2.0.7",
     "socket.io": "4.0.1",
     "start": "^5.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "6.0.2"
   }
 }
