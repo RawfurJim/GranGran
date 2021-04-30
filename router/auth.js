@@ -2,6 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const { User, validate } = require("../model/user");
+const checkAuth = require("../middlewares/checkAuth")
 
 function validateUserCredentials(value) {
   const schema = Joi.object({
@@ -29,7 +30,8 @@ router.post("/signin", async (req, res) => {
     return;
   }
   const token = user.getAuthToken();
-  res.status(200).send({ token });
+  delete user.password;
+  res.status(200).send({ token, user });
 });
 
 router.post("/signup", async (req, res) => {
@@ -56,11 +58,24 @@ router.post("/signup", async (req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
     await user.save();
     const token = user.getAuthToken();
-  
-    res.status(201).send({ token: token });
+    delete user.password;
+    res.status(201).send({ token: token, user});
   } catch (error) {
     res.status(500).send('Internal server error.')
   }
+});
+
+router.get("/me", [checkAuth], async (req, res) => {
+  
+  const user = await User
+    .findById(req.authUser._id)
+    .select('_id name email mobile');
+  
+  if (!user) {
+    res.status(404).send("User does not exist.");
+    return;
+  }
+  res.status(200).send(user);
 });
 
 module.exports = router;
