@@ -10,6 +10,25 @@ $disabled-color: #C9C9C9;
 	color: white;
 	padding: 15px 0;
 
+	.bell-icon {
+		cursor: pointer;
+	}
+
+	.notification {
+		position: relative;
+
+		.dot {
+			position: absolute;
+			top: 1px;
+			right: -1px;
+			height: 8px;
+			width: 8px;
+			background: rgb(255, 72, 0);
+			border-radius: 16px;
+			z-index: 20px;
+		}
+	}
+
 	.logo {
 		font-size: 1.4rem;
 		cursor: pointer;

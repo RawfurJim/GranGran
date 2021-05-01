@@ -9,6 +9,8 @@ const PATHS = {
 	signup: '/auth/signup',
 	signin: '/auth/signin',
 	me: '/auth/me',
+	notifications: '/notifications',
+	events: '/events'
 }
 
 const signUp = (userData) => {
@@ -45,8 +47,23 @@ const getAuthUser = (token) => {
 		})
 }
 
+const getNotifications = () => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+		}
+	}
+	return api.get(PATHS.notifications, config)
+		.then((response) => {
+			return response.data
+		}).catch(() => {
+			return null
+		})
+}
+
 export const API = {
 	signUp,
 	signIn,
-	getAuthUser
+	getAuthUser,
+	getNotifications
 }

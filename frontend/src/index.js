@@ -2,14 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router} from 'react-router-dom'
 import App from './app/app'
-import { AuthProvider } from './hooks'
+import { AuthProvider } from './context/auth'
+import { StateProvider } from './context/state'
 import './index.scss';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <AuthProvider>
-        <App />
+        <StateProvider>
+          <App />
+        </StateProvider>
       </AuthProvider>
     </Router>
   </React.StrictMode>,

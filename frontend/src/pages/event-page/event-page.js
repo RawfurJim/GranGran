@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import Calender from '../../components/calendar'
 import { io } from 'socket.io-client'
-
 import './event-page.scss'
 
 const EventPage = () => {

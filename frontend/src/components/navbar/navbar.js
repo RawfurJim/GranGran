@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../../hooks'
+import { useAuth, useGlobalState } from '../../hooks'
+import { FaBell } from 'react-icons/fa'
 
 import './navbar.scss'
 
@@ -18,7 +19,8 @@ const navItems = [
 const Navbar = () => {
 	const { pathname } = useLocation()
 	const { authUser, setAuthUser, isLoading } = useAuth()
-
+	const { notifications } = useGlobalState()
+	
 	const signOut = () => {
 		localStorage.removeItem('authToken')
 		setAuthUser(null)
@@ -31,6 +33,13 @@ const Navbar = () => {
 				{
 					authUser || isLoading?
 						<ul className='nav-items'>
+							<li className='item notification'>
+								<FaBell className='bell-icon' size='20' />
+								{
+									notifications.length > 0 ?
+										<div className='dot'/> : null
+								}
+							</li>
 							<li className='item'>
 								{authUser?.name}
 							</li>
