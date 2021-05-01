@@ -1,5 +1,4 @@
-import {useEffect} from 'react'
-import { Switch , useHistory, Redirect } from 'react-router-dom';
+import { Switch , Redirect } from 'react-router-dom';
 import LoginPage from '../pages/login-page';
 import RegisterPage from '../pages/register-page';
 import EventPage from '../pages/event-page';
@@ -11,13 +10,8 @@ import {useAuth} from '../hooks'
 import './app.scss';
 
 function App() {
-  const { authUser } = useAuth()
-  const history = useHistory()
-  useEffect(() => {
-    if (authUser) {
-      history.push('/events')
-    }
-  }, [authUser, history])
+  const { authUser, isLoading } = useAuth()
+  
   return (
     <>
       <Navbar />
@@ -29,7 +23,7 @@ function App() {
           authUser && <Redirect from="/" to='/events' />
         }
         {
-          !authUser && <Redirect from="/" to='/login' />
+          !authUser && !isLoading && <Redirect from="/" to='/login' />
         }
       </Switch>
     </>

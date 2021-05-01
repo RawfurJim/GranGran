@@ -5,7 +5,7 @@ const AuthContext = createContext(null)
 
 export const AuthProvider = (props) => {
 	const [authUser, setAuthUser] = useState(null)
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
 	const authToken = localStorage.getItem('authToken')
 	
 	const value = {
@@ -16,12 +16,13 @@ export const AuthProvider = (props) => {
 
 	useEffect(() => {
 		if (authToken) {
-			setIsLoading(true)
 			API.getAuthUser(authToken).then((response) => {
 				setAuthUser(response)
 			})
 				.catch(() => setAuthUser(null))
 				.finally(() => setIsLoading(false))
+		} else {
+			setIsLoading(false)
 		}
 	}, [authToken])
 

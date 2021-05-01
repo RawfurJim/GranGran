@@ -3,11 +3,11 @@ import { Route, useHistory } from 'react-router-dom'
 import { useAuth } from '../hooks'
 
 export const PrivateRoute = (props) => {
-	const { authUser } = useAuth()
+	const { authUser, isLoading } = useAuth()
 	const history = useHistory()
 
-	if (!authUser) {
-		history.push('/')
+	if (!authUser && !isLoading) {
+		history.push('/login')
 		return null
 	}
 	return <Route {...props}/>

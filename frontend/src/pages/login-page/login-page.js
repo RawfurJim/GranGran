@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks'
 import './login-page.scss'
 
 const LoginPage = () => {
-	const [state, setState] = useState({ email: '', password: '' })
+	const [state, setState] = useState({ email: 'jim@jim.com', password: 'test1234' })
 	const [isLogging, setIslogging] = useState(false)
 	const { setAuthUser } = useAuth()
 	const history = useHistory()
@@ -38,6 +38,7 @@ const LoginPage = () => {
 						id='email'
 						name='email'
 						type="email"
+						value={state.email}
 						onChange={inputHandler} />
 				</div>
 				<div className="form-group">
@@ -47,6 +48,7 @@ const LoginPage = () => {
 						id='password'
 						name='password'
 						type="password"
+						value={state.password}
 						onChange={inputHandler} />
 				</div>
 				<button type='submit' className='btn login-btn'>

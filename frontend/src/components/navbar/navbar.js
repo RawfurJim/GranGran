@@ -17,7 +17,7 @@ const navItems = [
 
 const Navbar = () => {
 	const { pathname } = useLocation()
-	const { authUser, setAuthUser } = useAuth()
+	const { authUser, setAuthUser, isLoading } = useAuth()
 
 	const signOut = () => {
 		localStorage.removeItem('authToken')
@@ -29,10 +29,10 @@ const Navbar = () => {
 			<div className="nav-container">
 				<Link className='logo' to='/'>GranGran</Link>
 				{
-					authUser ?
+					authUser || isLoading?
 						<ul className='nav-items'>
 							<li className='item'>
-								{authUser.name}
+								{authUser?.name}
 							</li>
 							<li
 								className='item'
