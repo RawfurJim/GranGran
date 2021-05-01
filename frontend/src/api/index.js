@@ -61,9 +61,27 @@ const getNotifications = () => {
 		})
 }
 
+const getEvents = (queryParams) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+		},
+		params: {
+			...queryParams
+		}
+	}
+	return api.get(PATHS.events, config)
+		.then((response) => {
+			return response.data
+		}).catch(() => {
+			return null
+		})
+}
+
 export const API = {
 	signUp,
 	signIn,
 	getAuthUser,
-	getNotifications
+	getNotifications,
+	getEvents,
 }

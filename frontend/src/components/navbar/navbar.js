@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import { useAuth, useGlobalState } from '../../hooks'
 import { FaBell } from 'react-icons/fa'
 
@@ -18,12 +18,14 @@ const navItems = [
 
 const Navbar = () => {
 	const { pathname } = useLocation()
+	const history = useHistory()
 	const { authUser, setAuthUser, isLoading } = useAuth()
 	const { notifications } = useGlobalState()
-	
+
 	const signOut = () => {
 		localStorage.removeItem('authToken')
 		setAuthUser(null)
+		history.push('/login')
 	}
 
 	return (

@@ -79,13 +79,15 @@ const Calendar = ({ onDateSelected, onMonthChanged, events, isBusy }) => {
 							{
 								events[formattedDate]?.slice(0, 3).map((event) => {
 									const id = event._id
+									const title = event.title.length > 18 ?
+										event.title.substr(0, 18)+'...' : event.title
 									return (
 										<div
 											key={id}
 											className='event-identifier'
 											style={{ background: getHexColor(id) }}
 										>
-											{id}
+											{title}
 										</div>
 									)
 								})
@@ -93,7 +95,9 @@ const Calendar = ({ onDateSelected, onMonthChanged, events, isBusy }) => {
 							{
 								events[formattedDate]?.length > 3 ?
 									<div className='more-events'>
-										<MoreIcon className='more-event-icon' />
+										<MoreIcon
+											size='20'
+											className='more-event-icon' />
 									</div> : null
 							}
 						</div>

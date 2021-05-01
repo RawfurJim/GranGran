@@ -6,7 +6,20 @@ const scheduler = require("../scheduler")
 
 router.get("/", async (req, res) => {
   try {
-    const events = await Event.find({ userId: req.authUser._id});
+    const { month } = req.query
+    let query
+    console.log(month)
+    if (month) {
+      const startOfMonth = dateFns.startOfMonth(new Date(month))
+      const endOfMonth = dateFns.endOfMonth(new Date(month))
+      query = Event.find({
+        userId: req.authUser._id,
+        dateTime: {$gte: startOfMonth, $lt: endOfMonth}
+      })
+    } else {
+      query = Event.find({ userId: req.authUser._id})
+    }
+    const events = await query;
     res.send(events);
   } catch (error) {
     res.status(500).send('Internal server error.')

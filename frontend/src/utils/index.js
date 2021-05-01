@@ -1,9 +1,9 @@
-// import ColorHash from 'color-hash';
+// eslint-disable-next-line
+import ColorHash from 'color-hash';
 import moment from 'moment';
 
 export const getHexColor = (str) => {
-	// const color = new ColorHash().hex(str)
-	return 'green';
+	return new ColorHash().hex(str);
 }
 
 export const dateUtil = {
