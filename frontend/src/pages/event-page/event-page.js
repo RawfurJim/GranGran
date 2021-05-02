@@ -7,13 +7,16 @@ import { API } from '../../api'
 import { useGlobalState } from '../../hooks'
 import { getHexColor, dateUtil } from '../../utils'
 import './event-page.scss'
+import Modal from '../../components/modal'
+import EventForm from '../../components/event-form'
 
 const EventPage = () => {
 	const [month, setMonth] = useState(() => new Date())
-	const { setEvents, events } = useGlobalState()
+	const {setEvents, events } = useGlobalState()
 	const [isFetching, setIsFetching] = useState(false)
 	const [selectedDate, setSelectedDate] = useState(null)
 	const [selectedEvents, setSelectedEvents] = useState([])
+	const [isSetReminderModalOpen, setIsSetReminderModalOpen] = useState(false)
 
 	const isBackDated = (date) => {
 		return dateUtil.isBeforeDay(date, new Date())
@@ -24,10 +27,10 @@ const EventPage = () => {
 	}
 
 	const onDateSelected = (date, events) => {
-		
 		setSelectedEvents(events ? events : [])	
 		setSelectedDate(date)
 	}
+
 	useEffect(() => {
 		setIsFetching(true)
 		API.getEvents({ month }).then((response) => {
@@ -35,6 +38,14 @@ const EventPage = () => {
 		}).finally(()=>setIsFetching(false))
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [month])
+
+	const onEventCreated = (res) => {
+		setIsSetReminderModalOpen(false)
+		setIsFetching(true)
+		API.getEvents({ month }).then((response) => {
+			setEvents(response)
+		}).finally(()=>setIsFetching(false))
+	}
 
 	useEffect(() => {
 		const socket = io('http://localhost:4000')
@@ -76,11 +87,16 @@ const EventPage = () => {
 									>
 										<div className='title'>{event.title}</div>
 										<div className='description'>{event.description}</div>
+										<div className='description'>
+											<span>Appointment at: </span>
+											{moment(event.dateTime)
+												.format('hh:mm a')}
+										</div>
 										<div className="reminder-title">
 											Reminder
 										</div>
 										<div className='reminder'>
-											<span>Time: </span>
+											<span>Start Time: </span>
 											<span>
 												{
 													moment(event.reminderStartDateTime)
@@ -113,7 +129,11 @@ const EventPage = () => {
 						<div className='add-reminder'>
 							<button
 								className={`btn ${isBackDated(selectedDate) ? 'disabled' : ''}`}
-								onClick={()=>{}}
+								onClick={() => {
+									if (!isBackDated(selectedDate)) {
+										setIsSetReminderModalOpen(true)
+									}
+								}}
 							>
 								Set New Reminder
 							</button>
@@ -121,6 +141,15 @@ const EventPage = () => {
 					</div>
 					: null
 			}
+			<Modal
+				isOpen={isSetReminderModalOpen}
+				onClose={() =>setIsSetReminderModalOpen(false)}
+			>
+				<EventForm
+					eventDate={selectedDate}
+					onEventCreated={onEventCreated}
+				/>
+			</Modal>
 		</div>
 	)
 }

@@ -8,7 +8,6 @@ router.get("/", async (req, res) => {
   try {
     const { month } = req.query
     let query
-    console.log(month)
     if (month) {
       const startOfMonth = dateFns.startOfMonth(new Date(month))
       const endOfMonth = dateFns.endOfMonth(new Date(month))
