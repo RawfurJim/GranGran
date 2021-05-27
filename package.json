@@ -21,6 +21,7 @@
     "joi": "^17.4.0",
     "joi-objectid": "3.0.1",
     "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "0.22.0",
     "mongoose": "^5.12.3",
     "morgan": "1.10.0",
     "node-schedule": "2.0.0",
